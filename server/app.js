@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
 const userRoutes = require("./routes/user");
+const loginRoutes = require("./routes/login");
+const transactionRoutes = require("./routes/transaction");
 const middleware = require("./utils/middleware");
 const logger = require("./utils/logger");
 
@@ -28,6 +30,8 @@ app.use(express.json());
 app.use(middleware.requestLogger);
 
 app.use("/api/users", userRoutes);
+app.use("/api/login", loginRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
