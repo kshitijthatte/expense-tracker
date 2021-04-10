@@ -10,11 +10,8 @@ const transactionSchema = new mongoose.Schema({
     required: true,
     minlength: 5,
   },
-  category: {
-    type: String,
-    required: true,
-  },
-  date: Date,
+  category: { type: String, enum: ["Income", "Expense"] },
+  date: { type: Date, default: Date.now },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

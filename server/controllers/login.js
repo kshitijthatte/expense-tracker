@@ -13,7 +13,7 @@ exports.userLogin = async (request, response) => {
 
   if (!(user && passwordCorrect)) {
     return response.status(401).json({
-      error: "invalid email or password",
+      error: "Invalid email or password",
     });
   }
 

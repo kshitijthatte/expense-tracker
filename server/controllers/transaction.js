@@ -25,7 +25,7 @@ exports.addTransaction = async (request, response, next) => {
     ammount: body.ammount,
     category: body.category,
     description: body.description,
-    date: new Date(),
+    date: body.date,
     user: user._id,
   });
 
@@ -36,11 +36,64 @@ exports.addTransaction = async (request, response, next) => {
   response.json(savedTransaction);
 };
 
-exports.getAllTransactions = async (request, response) => {
-  const transactions = await Transaction.find({}).populate("user", {
-    email: 1,
-    name: 1,
-  });
+// exports.getAllTransactions = async (request, response) => {
+//   const transactions = await Transaction.find({}).populate("user", {
+//     email: 1,
+//     name: 1,
+//   });
 
-  response.json(transactions);
+//   response.json(transactions);
+// };
+
+exports.getTransaction = async (request, response) => {
+  const transaction = await Transaction.findById(request.params.id);
+  if (transaction) {
+    response.json(transaction.toJSON());
+  } else {
+    response.status(404).end();
+  }
+};
+
+exports.updateTransaction = async (request, response) => {
+  const body = request.body;
+  const token = getTokenFrom(request);
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
+  }
+
+  const user = await User.findById(decodedToken.id);
+  const transactionToUpdate = await Transaction.findById(request.params.id);
+
+  if (user.id !== transactionToUpdate.user.toString()) {
+    return response.status(403).json({
+      error: "ACCESS DENIED",
+    });
+  }
+
+  const transaction = {
+    ammount: body.ammount,
+    category: body.category,
+    description: body.description,
+    date: body.date,
+    user: user._id,
+  };
+
+  const updatedTransaction = await Transaction.findByIdAndUpdate(
+    request.params.id,
+    transaction,
+    { new: true }
+  );
+
+  if (updatedTransaction) {
+    response.json(updatedTransaction.toJSON());
+  } else {
+    response.status(404).end();
+  }
+};
+
+exports.deleteTransaction = async (request, response) => {
+  await Transaction.findByIdAndRemove(request.params.id);
+  response.status(204).end();
 };
