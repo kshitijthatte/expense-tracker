@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const signup = (user) => {
   return axios
-    .post(`${API}/users/signup`, user)
+    .post(`${API}/signup`, user)
     .then((response) => response.data)
     .catch((err) => err.response.data);
 };
@@ -26,10 +26,10 @@ export const signout = (next) => {
     localStorage.removeItem("jwt");
     next();
 
-    return axios
-      .get(`${API}/signout`)
-      .then((response) => console.log("signout success"))
-      .catch((err) => console.log(err));
+    // return axios
+    //   .get(`${API}/signout`)
+    //   .then((response) => console.log("signout success"))
+    //   .catch((err) => console.log(err));
   }
 };
 

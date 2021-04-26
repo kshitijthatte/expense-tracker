@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { isAuthenticated } from "../helpers/authHelpers";
 import MoneyImage from "../images/undraw_wallet_aym5.png";
 import Tracker from "./Dashboard/Tracker";
@@ -16,6 +16,10 @@ const Main = () => {
   const authListener = () => {
     isAuthenticated() ? setUser(isAuthenticated()) : setUser(null);
   };
+
+  useEffect(() => {
+    authListener();
+  }, []);
 
   return (
     <>

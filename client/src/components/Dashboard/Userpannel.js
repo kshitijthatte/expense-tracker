@@ -1,19 +1,29 @@
 import React from "react";
 
-const Userpannel = ({ isUserpannelOpen }) => {
+const Userpannel = ({ isUserpannelOpen, transactions }) => {
+  let inflowSum = 0;
+  let outflowSum = 0;
+  transactions.forEach((transaction) => {
+    if (transaction.category === "Expense") {
+      outflowSum += transaction.ammount;
+    } else {
+      inflowSum += transaction.ammount;
+    }
+  });
+
   return (
     <section
-      class="fixed inset-y-0 top-0 right-0 z-10 flex-shrink-0 bg-white xl:z-0 xl:sticky w-80 xl:border-l focus:outline-none hidden xl:block"
+      className="fixed inset-y-0 top-0 right-0 z-10 flex-shrink-0 bg-white xl:z-0 xl:sticky w-80 xl:border-l focus:outline-none hidden xl:block"
       style={{ display: `${isUserpannelOpen ? "block" : ""}` }}
     >
-      <h2 class="sr-only">User panel</h2>
+      <h2 className="sr-only">User panel</h2>
 
-      <div class="flex flex-col h-screen">
-        <div class="flex-1 p-4 pt-16 space-y-8 overflow-y-hidden hover:overflow-y-auto">
-          <div class="flex flex-col items-center space-y-2">
+      <div className="flex flex-col h-screen">
+        <div className="flex-1 p-4 pt-16 space-y-8 overflow-y-hidden hover:overflow-y-auto">
+          <div className="flex flex-col items-center space-y-2">
             <svg
-              class="w-20 h-20 rounded-full"
-              enable-background="new 0 0 512 512"
+              className="w-20 h-20 rounded-full"
+              enableBackground="new 0 0 512 512"
               viewBox="0 0 512 512"
             >
               <g>
@@ -111,20 +121,29 @@ const Userpannel = ({ isUserpannelOpen }) => {
                 </g>
               </g>
             </svg>
-            <h2 class="text-xl font-medium text-gray-600">Kshitij Thatte</h2>
+            <h2 className="text-xl font-medium text-gray-600">
+              Kshitij Thatte
+            </h2>
           </div>
-          <div class="space-y-6">
-            <div class="flex items-center justify-between">
-              <h3 class="text-lg font-normal text-gray-600">Inflow</h3>
-              <p class="text-green-500">+ ₹xx,xxx</p>
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-normal text-gray-600">Inflow</h3>
+              <p className="text-green-500">+ ₹{inflowSum}</p>
             </div>
-            <div class="flex items-center justify-between">
-              <h3 class="text-lg font-normal text-gray-600">Outflow</h3>
-              <p class="text-red-500">- ₹xx,xxx</p>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-normal text-gray-600">Outflow</h3>
+              <p className="text-red-500">- ₹{outflowSum}</p>
             </div>
             <hr />
-            <div class="flex items-center justify-end">
-              <p class="text-green-500">+ ₹xx,xxx</p>
+            <div className="flex items-center justify-end">
+              <p
+                className={
+                  inflowSum >= outflowSum ? "text-green-500" : "text-red-500"
+                }
+              >
+                {inflowSum >= outflowSum ? "+" : "-"} ₹
+                {Math.abs(inflowSum - outflowSum)}
+              </p>
             </div>
             <hr />
           </div>

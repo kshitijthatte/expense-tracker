@@ -1,16 +1,48 @@
 const router = require("express").Router();
 const {
+  isSignedIn,
+  isAuthenticated,
+  isAuthorized,
+} = require("../controllers/auth");
+const {
+  getTransactionById,
   addTransaction,
-  getAllTransactions,
   getTransaction,
+  getAllTransactions,
   updateTransaction,
   deleteTransaction,
 } = require("../controllers/transaction");
+const { getUserById } = require("../controllers/user");
 
-router.post("/", addTransaction);
-// router.get("/", getAllTransactions);
-router.get("/:id", getTransaction);
-router.put("/:id", updateTransaction);
-router.delete("/:id", deleteTransaction);
+router.param("userId", getUserById);
+router.param("transactionId", getTransactionById);
+
+router.post("/:userId/add", isSignedIn, isAuthenticated, addTransaction);
+
+router.get("/:userId", isSignedIn, isAuthenticated, getAllTransactions);
+
+router.get(
+  "/:userId/:transactionId",
+  isSignedIn,
+  isAuthenticated,
+  isAuthorized,
+  getTransaction
+);
+
+router.put(
+  "/:userId/update/:transactionId",
+  isSignedIn,
+  isAuthenticated,
+  isAuthorized,
+  updateTransaction
+);
+
+router.delete(
+  "/:userId/delete/:transactionId",
+  isSignedIn,
+  isAuthenticated,
+  isAuthorized,
+  deleteTransaction
+);
 
 module.exports = router;
