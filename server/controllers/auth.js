@@ -10,7 +10,7 @@ exports.signup = async (req, res) => {
   if (!errors.isEmpty()) {
     return res
       .status(422)
-      .json({ errors: errors.array()[0].msg, param: errors.array()[0].param });
+      .json({ error: errors.array()[0].msg, param: errors.array()[0].param });
   }
 
   const body = req.body;
@@ -40,7 +40,7 @@ exports.login = async (req, res) => {
   if (!errors.isEmpty()) {
     return res
       .status(422)
-      .json({ errors: errors.array()[0].msg, param: errors.array()[0].param });
+      .json({ error: errors.array()[0].msg, param: errors.array()[0].param });
   }
 
   const body = req.body;
@@ -70,6 +70,7 @@ exports.login = async (req, res) => {
     token,
     email: user.email,
     name: user.name,
+    id: user._id,
   });
 };
 

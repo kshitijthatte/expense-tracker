@@ -1,15 +1,36 @@
-import React, { useState } from "react";
-import { isAuthenticated } from "../../helpers/authHelpers";
+import React, { useState, useEffect } from "react";
+import { isAuthenticated, signout } from "../../helpers/authHelpers";
+import { getAllTransactions } from "../../helpers/transactionHelpers";
 import Sidebar from "./Sidebar";
 import Transaction from "./Transaction";
 import Userpannel from "./Userpannel";
+import AddTransaction from "./AddTransaction";
 
 const Tracker = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isUserpannelOpen, setIsUserpannelOpen] = useState(false);
-
+  const [addTransactionWindow, setAddTransactionWindow] = useState(false);
+  const [transactions, setTransactions] = useState([]);
   const user = isAuthenticated();
-  console.log(user);
+
+  const preload = () => {
+    getAllTransactions(user.id, user.token).then((data) => {
+      if (data.error) {
+        console.log(data.error);
+        if (data.error === "token expired") {
+          signout(() => {});
+        }
+      } else {
+        // console.log(data);
+        setTransactions(data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    preload();
+  }, []);
+
   return (
     <div className="flex h-screen antialiased text-gray-900 bg-gray-100">
       {isSidebarOpen && (
@@ -83,14 +104,23 @@ const Tracker = () => {
 
           <div className="flex justify-between px-8 py-3 font-medium">
             <p className="text-2xl font-semibold md:text-3xl">Transactions</p>
-            <button className="p-2 text-center bg-white rounded-md shadow-md bg-green-600 text-white hover:bg-green-700 cursor-pointer">
+            {addTransactionWindow && (
+              <AddTransaction
+                closeWindow={() => setAddTransactionWindow(false)}
+                updateTransactions={preload}
+              />
+            )}
+            <button
+              onClick={() => setAddTransactionWindow(true)}
+              className="p-2 text-center bg-white rounded-md shadow-md bg-green-600 text-white hover:bg-green-700 cursor-pointer focus:outline-none"
+            >
               + Add Transaction
             </button>
           </div>
 
           <div className="grid grid-cols-1 gap-4 px-8 py-4">
-            {user.transactions.map((transaction) => (
-              <Transaction transaction={transaction} />
+            {transactions.map((transaction) => (
+              <Transaction key={transaction._id} transaction={transaction} />
             ))}
           </div>
         </main>
@@ -105,7 +135,8 @@ const Tracker = () => {
         )}
         <Userpannel
           isUserpannelOpen={isUserpannelOpen}
-          transactions={user.transactions}
+          userName={user.name}
+          transactions={transactions}
         />
       </div>
     </div>

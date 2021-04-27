@@ -24,8 +24,14 @@ exports.addTransaction = async (req, res) => {
     user: user._id,
   });
 
-  const savedTransaction = await transaction.save();
-  res.json(savedTransaction);
+  try {
+    const savedTransaction = await transaction.save();
+    res.json(savedTransaction);
+  } catch (exception) {
+    res.status(404).json({
+      error: "Unable to Add Transaction in DB",
+    });
+  }
 };
 
 exports.getTransaction = (req, res) => {
@@ -35,7 +41,7 @@ exports.getTransaction = (req, res) => {
 exports.getAllTransactions = async (req, res) => {
   const transactions = await Transaction.find({
     user: req.user.id,
-  });
+  }).sort({ date: -1 });
 
   res.json(transactions);
 };

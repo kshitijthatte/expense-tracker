@@ -8,7 +8,6 @@ import Signup from "./Forms/Signup";
 const Main = () => {
   const [user, setUser] = useState(isAuthenticated());
   const [loginForm, setLoginForm] = useState(true);
-
   const formSwitcher = () => {
     setLoginForm(!loginForm);
   };

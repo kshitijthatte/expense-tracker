@@ -1,6 +1,6 @@
 import React from "react";
 
-const Userpannel = ({ isUserpannelOpen, transactions }) => {
+const Userpannel = ({ isUserpannelOpen, userName, transactions }) => {
   let inflowSum = 0;
   let outflowSum = 0;
   transactions.forEach((transaction) => {
@@ -121,9 +121,7 @@ const Userpannel = ({ isUserpannelOpen, transactions }) => {
                 </g>
               </g>
             </svg>
-            <h2 className="text-xl font-medium text-gray-600">
-              Kshitij Thatte
-            </h2>
+            <h2 className="text-xl font-medium text-gray-600">{userName}</h2>
           </div>
           <div className="space-y-6">
             <div className="flex items-center justify-between">

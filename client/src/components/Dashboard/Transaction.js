@@ -1,11 +1,20 @@
 import React from "react";
 
 const Transaction = ({ transaction }) => {
+  const formatDate = (date) => {
+    const newDate = new Date(date);
+    return newDate.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
   return (
     <div className="flex justify-between p-4 bg-white rounded-md shadow">
       <div>
         <h3 className="text-lg font-medium">{transaction.description}</h3>
-        <p className="text-sm">{transaction.date}</p>
+        <p className="text-sm">{formatDate(transaction.date)}</p>
       </div>
 
       <div className="flex items-center">

@@ -1,7 +1,7 @@
 import React from "react";
 import { signout } from "../../helpers/authHelpers";
 
-const Sidebar = ({ isSidebarOpen, history }) => {
+const Sidebar = ({ isSidebarOpen }) => {
   return (
     <aside
       className="fixed inset-y-0 z-10 flex flex-shrink-0 bg-white border-r md:static focus:outline-none hidden md:block"
